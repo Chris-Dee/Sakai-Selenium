@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import json
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -48,4 +49,9 @@ def script(request):
         target = open('.' + current_file.url, 'r')
         print target.read()
         os.system("python ." + current_file.url)
+        return HttpResponseNotModified()
+    if request.method == 'DELETE':
+        print "got here"
+        title = json.loads(request.read())['title']
+        Document.objects.get(title = title).delete()
         return HttpResponseNotModified()

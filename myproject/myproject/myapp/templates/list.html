@@ -5,6 +5,8 @@
     <head>
         <meta charset="utf-8">
         <title>Minimal Django File Upload Example</title>
+        <!-- Jquery include -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
         <!-- Bootstrap Core CSS -->
         <link href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
@@ -28,8 +30,53 @@
             <div class="panel-body">
             <div class="list-group">
                 {% for document in documents %}
-                    <!--<li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li> -->
-                    <a class="list-group-item" href="script/?title={{ document.title }}">{{ document.title }}</a>
+                    <!--<li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>                       -->
+                    <div class="list-group-item" id="span_{{document.title}}">
+                    <a class="list-group-item" >{{ document.title }}
+                        <input type="button" id="run_{{document.title}}"  href="script/?title={{ document.title }}" value="run script {{document.title}}" style="float: right;">
+                        <input type="button" id="delete_{{document.title}}" value="Delete Script" style="float: right;">
+                    </a>
+                    
+                    <script>
+                        function getCookie(cname) {
+                            var name = cname + "=";
+                            var ca = document.cookie.split(';');
+                            for(var i = 0; i <ca.length; i++) {
+                                var c = ca[i];
+                                while (c.charAt(0)==' ') {
+                                    c = c.substring(1);
+                                }
+                                if (c.indexOf(name) == 0) {
+                                    return c.substring(name.length,c.length);
+                                }
+                            }
+                            return "";
+                        }
+                        $(document).ready(function(){
+                            $("[id='run_{{document.title}}']").click(function(){
+                                $.get("script/?title={{ document.title }}", function(response){
+                                        alert("script finished running")
+                                    }
+                                )
+                            })
+                            $("[id='delete_{{document.title}}']").click(function(){
+                                $.ajax({
+                                    url: 'script/?title={{ document.title }}', 
+                                    type: "DELETE", 
+                                    data: JSON.stringify({"title": "{{document.title}}"}),
+                                    beforeSend: function(xhr) {
+                                        xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
+                                    },
+                                    success: function(response){
+                                        $("[id='span_{{document.title}}']").hide()
+                                        alert("script deleted with errors:")
+                                    }})
+                            })
+                        })
+                    </script>
+                
+                </div>
+
                 {% endfor %}
             </div>
             </div>
