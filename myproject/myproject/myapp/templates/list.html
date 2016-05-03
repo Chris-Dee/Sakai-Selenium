@@ -1,0 +1,74 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Minimal Django File Upload Example</title>
+
+        <!-- Bootstrap Core CSS -->
+        <link href="{% static "bower_components/bootstrap/dist/css/bootstrap.min.css" %}" rel="stylesheet">
+
+        <!-- MetisMenu CSS -->
+        <link href="{% static "bower_components/metisMenu/dist/metisMenu.min.css" %}" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="{% static "dist/css/sb-admin-2.css" %}" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="{% static "bower_components/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
+    </head>
+
+    <body>
+        <div class="row">
+        <div class="col-lg-6">
+        <!-- List of uploaded documents -->
+        {% if documents %}
+        <div class="panel panel-default">
+            <div class="panel-body">
+            <div class="list-group">
+                {% for document in documents %}
+                    <!--<li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li> -->
+                    <a class="list-group-item" href="script/?title={{ document.title }}">{{ document.title }}</a>
+                {% endfor %}
+            </div>
+            </div>
+        </div>
+        {% else %}
+            <p>No documents.</p>
+        {% endif %}
+        </div>
+        <div class="col-lg-6">
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url "list" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>{{ form.non_field_errors }}</p>
+            <p>{{ form.titleField}}
+
+            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+
+            <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+            </p>
+
+            <p><input type="submit" value="Upload"/></p>
+
+        </form>
+        </div>
+    </div>
+        <!-- jQuery -->
+        <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+
+        <!-- Bootstrap Core JavaScript -->
+        <script src="{% static "bower_components/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="{% static "bower_components/metisMenu/dist/metisMenu.min.js" %}"></script>
+
+        <!-- Custom Theme JavaScript -->
+        <script src="{% static "dist/js/sb-admin-2.js" %}"></script>
+
+    </body>
+
+</html>
