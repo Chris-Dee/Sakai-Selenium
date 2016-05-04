@@ -8,6 +8,28 @@ body {
     background-color: #f8f8f8;
 }
 
+h1{
+    margin-left: 20px;
+}
+
+#upload-button, #add-site-button {
+    margin-top:20px;
+}
+
+.fixed-panel-body {
+    min-height:400px;
+    max-height:400px;
+    overflow-y:scroll;
+}
+
+.panel-heading>h3 {
+    margin-top:10px;
+}
+
+.btn-xs{
+    margin-left:5px;
+}
+
 #wrapper {
     width: 100%;
 }

@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <title>Minimal Django File Upload Example</title>
+        <title>Sakai Autotester</title>
         <!-- Jquery include -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 
@@ -23,18 +23,46 @@
 
     <body>
         <div class="row">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h1>Sakai Autotester</h1>
+        </div> 
+        <div class="panel-body">
         <div class="col-lg-6">
         <!-- List of uploaded documents -->
-        {% if documents %}
+
+
+        
         <div class="panel panel-default">
-            <div class="panel-body">
-            <div class="list-group">
+            <div class="panel-heading">
+                <h3>Available Scripts</h3>
+            </div>
+            <div class="panel-body fixed-panel-body">
+            {% if sites %}
+                <div class="form-group">
+                <label>Testing Sites:</label>
+                {% for site in sites %}
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="sitesRadio" id="siteRadio_{{site.id}}" value="{{site.url}" checked>
+                        {{site.url}}
+                    </label>
+                </div>
+
+                {% endfor %}
+                </div>
+            {% else %} 
+                <strong style="color:red;">&nbsp  No testing sites available</strong><br><br>
+            {% endif %}   
+            {% if documents %}
+                <label>Scripts: </label>
                 {% for document in documents %}
                     <!--<li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>                       -->
-                    <div class="list-group-item" id="span_{{document.title}}">
-                    <a class="list-group-item" >{{ document.title }}
-                        <input type="button" id="run_{{document.title}}"  href="script/?title={{ document.title }}" value="run script {{document.title}}" style="float: right;">
-                        <input type="button" id="delete_{{document.title}}" value="Delete Script" style="float: right;">
+                    <a class="list-group-item" id="span_{{document.title}}">{{ document.title }}
+                        <div class="pull-right">                        
+                            <input type="button" class="btn btn-success btn-xs" id="run_{{document.title}}"  href="script/?title={{ document.title }}" value="Run Script">
+                            <input type="button" class="btn btn-danger btn-xs" id="delete_{{document.title}}" value="Delete Script">
+                        </div>
                     </a>
                     
                     <script>
@@ -54,8 +82,13 @@
                         }
                         $(document).ready(function(){
                             $("[id='run_{{document.title}}']").click(function(){
-                                $.get("script/?title={{ document.title }}", function(response){
+                                $.get("script/?title={{ document.title }}", function(response, textStatus, request){
                                         alert("script finished running")
+                                        var $data=$(response.responseText);
+                                        var result_message=JSON.stringify($data.filter('#result'));
+                                        console.log(result_message)
+                                        showResultSucceed(response)
+                                        alert("script run with output:" + result_message)
                                     }
                                 )
                             })
@@ -69,28 +102,32 @@
                                     },
                                     success: function(response){
                                         $("[id='span_{{document.title}}']").hide()
-                                        alert("script deleted with errors:")
+                                        alert("script deleted")
                                     }})
                             })
                         })
                     </script>
                 
-                </div>
 
                 {% endfor %}
-            </div>
+            {% else %}
+                <p>No documents.</p>
+            {% endif %}
             </div>
         </div>
-        {% else %}
-            <p>No documents.</p>
-        {% endif %}
+        
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-3">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Upload Script</h3>
+        </div>
+        <div class="panel-body fixed-panel-body">
         <!-- Upload form. Note enctype attribute! -->
         <form action="{% url "list" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <p>{{ form.non_field_errors }}</p>
-            <p>{{ form.titleField}}
+            <p><label>Script Name:</label><br>{{ form.titleField}}</p><br>
 
             <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
 
@@ -99,10 +136,33 @@
                 {{ form.docfile }}
             </p>
 
-            <p><input type="submit" value="Upload"/></p>
+            <p><input id="upload-button" class="btn btn-lg btn-primary" type="submit" value="Upload"/></p>
 
         </form>
         </div>
+        </div>
+        </div>
+        <div class="col-lg-3">
+        <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Add Testing Site</h3>
+        </div>
+        <div class="panel-body fixed-panel-body">
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url "list" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>{{ site_form.non_field_errors }}</p>
+            <p><label>Site URL:</label><br>{{ site_form.urlField}}</p>
+
+            <p><input id="add-site-button" class="btn btn-lg btn-primary" type="submit" value="Add"/></p>
+
+        </form>
+        </div>
+        </div>
+        </div>
+    </div>
+    </div>
+    </div>
     </div>
         <!-- jQuery -->
         <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
