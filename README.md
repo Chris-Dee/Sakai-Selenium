@@ -1,5 +1,6 @@
 # Sakai-Selenium
 
+##Developer
 To run server, go to Sakai-Selenium/myproject and run
 ```python
 sudo python manage.py runserver 0.0.0.0:80
@@ -15,7 +16,7 @@ from selenium import ....
 from selenium import ....
 import unittest, time, re...
 ```
-
+##Uploading Scripts
 If you want the URL your script is tested on to be variable (i.e. they can be changed on the frontend), follow the steps below. 
 Otherwise, please put the URL your script is running on in the title of the script!
 
