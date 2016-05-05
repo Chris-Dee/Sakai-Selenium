@@ -7,9 +7,13 @@ Users can then enter the app and run these scripts on any of the URLs that have 
 
 ##Future Versions
 We would like to eventually have the following features in this app:
+
 1. We would like to fully sandbox the running of these scripts using pypy's sandoxed version, to ensure safety from custom scripts
+
 2. We would like to allow an option for users to change the values of field entries (e.g. username, password, poll name) from the client side display
+
 3. We would like the parameters of an uploaded script to be stored along with the script in the database.
+
 4. We would like to do more pre-processing of the script in the server, so that users do not have to manually change the URL and add certain scripts
 
 ##Developer
