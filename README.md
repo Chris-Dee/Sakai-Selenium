@@ -13,8 +13,11 @@ Your script must be uploaded from the Selenium IDE (or using the same import str
 ```python
 from selenium import ....
 from selenium import ....
-import unittest, time, re, sys
+import unittest, time, re...
 ```
+
+If you want the URL your script is tested on to be variable (i.e. they can be changed on the frontend), follow the steps below. 
+Otherwise, please put the URL your script is running on in the title of the script!
 
 inside your script, before uploading, add the lines:
 ```python
@@ -29,6 +32,7 @@ with
 ```python
 self.base_url = url
 ```
+
 
 Your script should then be good to upload. 
 
