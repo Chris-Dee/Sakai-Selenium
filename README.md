@@ -16,6 +16,8 @@ We would like to eventually have the following features in this app:
 
 4. We would like to do more pre-processing of the script in the server, so that users do not have to manually change the URL and add certain scripts
 
+5. We would like to move off of the unittest framework (unittest.main is a nightmare), and call individual methods, rather than have several workarounds to fit with the unittest.main function.
+
 ##Developer
 To run server, go to Sakai-Selenium/myproject and run
 ```python
