@@ -44,7 +44,7 @@
                 {% for site in sites %}
                 <div class="radio">
                     <label>
-                        <input type="radio" name="sitesRadio" id="siteRadio_{{site.id}}" value="{{site.url}" checked>
+                        <input type="radio" name="sitesRadio" id="siteRadio_{{site.id}}" value="{{site.url}}" checked>
                         {{site.url}}
                     </label>
                 </div>
@@ -82,13 +82,10 @@
                         }
                         $(document).ready(function(){
                             $("[id='run_{{document.title}}']").click(function(){
-                                $.get("script/?title={{ document.title }}", function(response, textStatus, request){
-                                        alert("script finished running")
-                                        var $data=$(response.responseText);
-                                        var result_message=JSON.stringify($data.filter('#result'));
-                                        console.log(result_message)
-                                        showResultSucceed(response)
-                                        alert("script run with output:" + result_message)
+                                var site = $('input[name=sitesRadio]:checked').val();
+                                $.get("script/?title={{ document.title }}&url="+site, function(response, textStatus, request){
+                                        console.log(response);
+                                        alert("script run with output: \n" + response.result);
                                     }
                                 )
                             })
@@ -101,8 +98,8 @@
                                         xhr.setRequestHeader("X-CSRFToken", getCookie("csrftoken"));
                                     },
                                     success: function(response){
-                                        $("[id='span_{{document.title}}']").hide()
-                                        alert("script deleted")
+                                        $("[id='span_{{document.title}}']").hide();
+                                        alert("script deleted");
                                     }})
                             })
                         })
