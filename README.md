@@ -8,7 +8,7 @@ Users can then enter the app and run these scripts on any of the URLs that have 
 ##Future Versions
 We would like to eventually have the following features in this app:
 
-1. We would like to fully sandbox the running of these scripts using pypy's sandoxed version, to ensure safety from custom scripts
+1. We would like to fully sandbox the running of these scripts using pypy's sandoxed version, to ensure safety from custom scripts (this would allow for more flexibility in terms of what selenium files users could upload)
 
 2. We would like to allow an option for users to change the values of field entries (e.g. username, password, poll name) from the client side display
 
