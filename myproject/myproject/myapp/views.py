@@ -19,7 +19,7 @@ from myproject.myapp.forms import DocumentForm
 from myproject.myapp.models import Site
 from myproject.myapp.forms import SiteForm
 
-
+sandbox_url = "/home/SakaiTester/Sakai-Selenium/pypy_sandbox/pypy-5.1.1-src/pypy/sandbox/pypy_interact.py"
 def list(request):
     # Handle file upload
 
@@ -78,10 +78,9 @@ def script(request):
 	stdout_temp = sys.stdout
         print sys.stderr
         curr_path = os.path.dirname(os.path.abspath(__file__))
+
         log_filename = curr_path + "/logs/"+title+"selenium_log" + timestring + ".log"
         log_filename=log_filename.replace(" ", "_")
-	print log_filename
-	#log_string = StringIO()
         if not os.path.exists(os.path.dirname(log_filename)):
                 print "yay"
                 try:
@@ -90,25 +89,8 @@ def script(request):
                     raise Exception("creating directory failed")
         log_file = open(log_filename, 'w+')
 
-	#print sys.stderr
-	#print sys.stdout
-        #sys.stderr = log_string
-	#sys.stdout = log_string
-
-	#test_import = imp.load_source('test_import', '.' + current_file.url)
         subprocess.call(["python", os.getcwd() + current_file.url], stdout=log_file, stderr=log_file)	
-        #test_import.unittest.main(module=test_import, argv=sys.argv[:1], exit=False)
-	
-	#print sys.stderr
-	#print sys.stdout
-        #sys.stderr = stderr_temp
-	#sys.stdout = stdout_temp
-	#print sys.stderr
-	#print sys.stdout
-        #log_file.write(log_string.getvalue())
-#        log_file = open("selenium_log" + timestring, 'r')
-        
-	#test_output = log_string.getvalue()
+        #subprocess.call(["~/pypy-c-sandbox",sandbox_url, os.getcwd() + current_file.url])#,stdout=log_file, stderr=log_file)	
         log_file.close() 
 	log_file = open(log_filename, 'r')
 	test_output = log_file.read()
