@@ -38,22 +38,28 @@
                 <h3>Available Scripts</h3>
             </div>
             <div class="panel-body fixed-panel-body">
-            {% if sites %}
                 <div class="form-group">
+            {% if sites %}
                 <label>Testing Sites:</label>
                 {% for site in sites %}
                 <div class="radio">
                     <label>
-                        <input type="radio" name="sitesRadio" id="siteRadio_{{site.id}}" value="{{site.url}}" checked>
+                        <input type="radio" name="sitesRadio" id="siteRadio_{{site.id}}" value="{{site.url}}">
                         {{site.url}}
                     </label>
                 </div>
 
                 {% endfor %}
-                </div>
             {% else %} 
                 <strong style="color:red;">&nbsp  No testing sites available</strong><br><br>
-            {% endif %}   
+            {% endif %}
+            <div class="radio">
+                    <label>
+                        <input type="radio" name="sitesRadio" value="none" checked>
+                        No selection
+                    </label>
+                </div> 
+            </div>
             {% if documents %}
                 <label>Scripts: </label>
                 {% for document in documents %}

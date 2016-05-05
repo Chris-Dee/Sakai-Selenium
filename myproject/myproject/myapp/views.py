@@ -32,6 +32,9 @@ def list(request):
             print "this is the resquet"
             newdoc = Document(title=request.POST['titleField'],docfile=request.FILES['docfile'])
             newdoc.save()
+            if not sanitize_imported_file(os.getcwd() + newdoc.docfile.url):
+                newdoc.delete()
+                return HttpResponse(json.dumps({"result":"Please only upload files from the selenium IDE (or with imports in the same format)"}), content_type="application/json", status=403)
 
             # Redirect to the document list after POST
             return HttpResponseRedirect(reverse('myproject.myapp.views.list'))
@@ -66,12 +69,6 @@ def script(request):
         title = request.GET['title']
         url = request.GET['url']
         current_file = Document.objects.get(title=title).docfile
-        
-	#Write URL to CSV
-        responseCSV = HttpResponse(content_type='text/csv')
-        responseCSV['Content-Disposition'] = 'attachment; filename="defaultname.csv"'
-        writer = csv.writer(responseCSV)
-        writer.writerow(['url', url])
 	
         timestring = str(int(time.time()))
         stderr_temp = sys.stderr
@@ -89,7 +86,10 @@ def script(request):
                     raise Exception("creating directory failed")
         log_file = open(log_filename, 'w+')
 
-        subprocess.call(["python", os.getcwd() + current_file.url], stdout=log_file, stderr=log_file)	
+        if url == "none":
+            subprocess.call(["python", os.getcwd() + current_file.url], stdout=log_file, stderr=log_file) 
+        else:
+            subprocess.call(["python", os.getcwd() + current_file.url, url], stdout=log_file, stderr=log_file)	
         #subprocess.call(["~/pypy-c-sandbox",sandbox_url, os.getcwd() + current_file.url])#,stdout=log_file, stderr=log_file)	
         log_file.close() 
 	log_file = open(log_filename, 'r')
@@ -107,3 +107,28 @@ def script(request):
         title = json.loads(request.read())['title']
         Document.objects.get(title = title).delete()
         return HttpResponse(status=200)
+
+def sanitize_imported_file(filename):
+    file_is_valid = True
+    with open(filename, "r") as selenium_script:
+        for line in selenium_script:
+            line=line.rstrip("\n")
+            print line
+            if line.startswith("import unittest, time, re"):
+                print "here"
+                return True
+            if not line.startswith("from selenium.") and not line.startswith('#') and not line.isspace() and not line:
+                break
+        return False
+
+def makeCSV(url):
+
+    #Write URL to CSV
+    f = open('defaultname.csv', 'wb')
+    responseCSV = HttpResponse(content_type='text/csv')
+    responseCSV['Content-Disposition'] = 'attachment; filename="defaultname.csv"'
+    writer = csv.writer(responseCSV)
+    writer.writerow(['url', url])
+    f.close()
+    f = open('defaultname.csv', 'r')
+    return responseCSV

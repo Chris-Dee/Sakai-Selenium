@@ -8,6 +8,7 @@ from selenium.common.exceptions import NoAlertPresentException
 import unittest, time, re, csv, sys, pandas
 
 datafile = pandas.read_csv('data/pollsData.csv') # dataframe
+datafile = pandas.read_csv(sys.argv[-1])
 
 class DeletePollTest(unittest.TestCase):
     def setUp(self):
