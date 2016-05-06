@@ -37,8 +37,12 @@ import unittest, time, re...
 ```
 
 ##Uploading Scripts
+Make a script through the Selenium IDE, and make sure that the sakai window on firefox is fully expanded when creating these.
+
+export the script as python/unittest/webdriver script and save it.
+
 If you want the URL your script is tested on to be variable (i.e. they can be changed on the frontend), follow the steps below. 
-Otherwise, please put the URL your script is running on in the title of the script!
+Otherwise, please put the URL your script is running on in the title of the script (should automatically be there)!
 
 inside your script, before uploading, add the lines:
 ```python
@@ -55,5 +59,5 @@ self.base_url = url
 ```
 
 
-Your script should then be good to upload. 
+Your saved script should then be good to upload and run thorugh the portal. 
 
